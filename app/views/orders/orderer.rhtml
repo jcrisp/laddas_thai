@@ -1,0 +1,59 @@
+<h1>Listing orders</h1>
+<br> 
+<table>
+<% if @orders.size > 0 then %>
+  <tr>
+  	<th><%= link_to 'Person', { :action => 'orderer', :order_by => 'person' } %></th>
+		<th><%= link_to 'Dish #', { :action => 'orderer', :order_by => 'dish_id' } %></th>
+  	<th>Dish Description</th>
+  	<th>Note</th>
+  	<th>Price</th>
+  	<th><%= link_to 'Paid', { :action => 'orderer', :order_by => 'paid' } %></th>
+  </tr>
+ <% else %>
+ 	<tr><th>No orders yet</th></tr>
+ <% end %>
+  
+  <% sum = 0 %>
+  <% paidsum = 0 %>
+  <% unpaidsum = 0 %>
+<% for order in @orders %>
+  <tr>
+  <td><%= order.person %></td>
+  <td><%= order.dish.number %></td>
+  <td><%= order.dish.description %></td>
+  <td><%= order.note %></td>
+  <td>$<%= '%.2f' % order.dish.price %></td>
+  <td><%= link_to order.paid ? 'Paid' : 'NOT PAID', { :action => 'pay', :id => order } %></td>
+    <td><%= link_to 'Remove', { :action => 'destroy', :id => order } %></td>
+	<% sum += order.dish.price %>
+	<% paidsum += order.dish.price if order.paid %>
+	<% unpaidsum += order.dish.price if !order.paid %>
+  </tr>
+<% end %>
+</table>
+
+<br><b>Paid Total = $<%= '%.2f' % paidsum %>
+<br><b>Unpaid Total = $<%= '%.2f' % unpaidsum %>
+<br><b>Total = $<%= '%.2f' % sum %>
+<br>
+<br>
+<%= link_to 'Previous page', { :page => @order_pages.current.previous } if @order_pages.current.previous %>
+<%= link_to 'Next page', { :page => @order_pages.current.next } if @order_pages.current.next %>
+
+<br />
+<table>
+  <tr>
+  <td><%= link_to 'New order', :action => 'new' %></td>
+  <td><%= link_to 'Clear all orders', { :action => 'destroy_all' }, :confirm => 'This will remove all orders. Are you sure?'  %></td>
+  <td><%= link_to (@access != nil && @access.locked) ? 'Unlock' : 'Lock down', { :action => 'lockdown' } %></td>
+  </tr>
+</table>
+
+<pre>
+	LADDA'S THAI TAKEAWAY
+	593 King St Newtown 2042
+	Ph.	(02) 9516 2870
+	Fax	(02) 9550 2609
+
+James' mobile: 0421 944 396 </pre>

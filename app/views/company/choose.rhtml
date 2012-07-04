@@ -1,0 +1,12 @@
+<body>
+<h1>Company</h1>
+<p>Please choose your company.</p>
+<%= start_form_tag :action => 'chosen' %>
+<p>
+<br>
+<select name="company"><option value="EDI">EDI</option>
+<option value="Dennis Building">Dennis Building</option></select>
+<%= submit_tag 'Choose'%>
+<%= end_form_tag %>
+</p>
+</body>

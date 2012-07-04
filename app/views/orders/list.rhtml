@@ -1,0 +1,46 @@
+<h1>Listing orders</h1>
+<br>
+<table>
+
+<% if @orders.size > 0 then %>
+  <tr>
+  	<th><%= link_to 'Person', { :action => 'list', :order_by => 'person' } %></th>
+  	<th>Dish #</th>
+  	<th>Dish Description</th>
+  	<th>Note</th>
+  	<th>Price</th>
+  </tr>
+ <% else %>
+ 	<tr><th>No orders yet</th></tr>
+ <% end %>
+  
+  <% sum = 0 %>
+<% for order in @orders %>
+  <tr>
+  <td><%= order.person %></td>
+  <td><%= order.dish.number %></td>
+  <td><%= order.dish.description %></td>
+  <td><%= order.note %></td>
+  <td>$<%= '%.2f' % order.dish.price %></td>
+	<% sum += order.dish.price %>
+  </tr>
+<% end %>
+</table>
+
+<br><b>Total = $<%= '%.2f' % sum %>
+<br>
+<br>
+<%= link_to 'Previous page', { :page => @order_pages.current.previous } if @order_pages.current.previous %>
+<%= link_to 'Next page', { :page => @order_pages.current.next } if @order_pages.current.next %>
+
+<br />
+
+<% if @access == nil || !@access.locked then %>
+<%= link_to 'New order', :action => 'new' %>
+
+<br>
+<% else %>
+   Sorry, you have missed the ordering boat.
+   <br>We are closed because the order has been placed. Please come back next week.
+<% end %>
+<p><br>&nbsp;<br><%= link_to 'Log out of ' + session[:company], :controller=>'company', :action => 'chosen' %></p>
